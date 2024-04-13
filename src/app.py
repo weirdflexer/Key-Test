@@ -1,26 +1,39 @@
 import customtkinter
 from tkinter import PhotoImage
-from PIL import Image
+from keyboardList import keyboardMac
 
 width = 1280
 height = 720
 nameOfApp = "Keybi"
-iconPath = "content/keyboard.png"
+iconPath = "src/content/keyboard.png"
+
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title(nameOfApp)
         self.geometry(f"{width}x{height}")
-        self.resizable(width=False, height= False)
+        self.resizable(width=False, height=False)
         icon = PhotoImage(file=iconPath)
         self.iconphoto(True, icon)
+        self.canvas = customtkinter.CTkCanvas(
+            self,
+            width=width,
+            height=height - 40,
+            bg="#242424",
+            highlightbackground="black"
+        )
+        self.canvas.place(x=-3, y=40)
 
-my_image = customtkinter.CTkImage(light_image=Image.open(iconPath),
-                                  dark_image=Image.open(iconPath),
-                                  size=(30, 30))
+    def keyDisplay(self, __x0: int, __y0: int, __x1: int, __y1: int, sign: str) -> None:
+        self.canvas.create_rectangle(__x0, __y0, __x1, __y1, fill="#242424")
+        self.canvas.create_text(__x0+15, __y0+15, text=sign)
 
-image_label = customtkinter.CTkLabel(App.tk, image=my_image, text="")  # display image with a CTkLabel       
+    def keyDisplay1(self, __x0: int, __y0: int, __x1: int, __y1: int) -> None:
+        self.canvas.create_rectangle(__x0, __y0, __x1, __y1, fill="#FF1493")
+
 
 app = App()
-app.mainloop()
+
+for i in keyboardMac.values():
+    app.keyDisplay(i[3], i[4], i[5], i[6], i[0])
